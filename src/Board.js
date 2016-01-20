@@ -79,12 +79,31 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var result = false;
+      var wasFound = false;
+      var chessboard = this.attributes;
+      var row = chessboard[rowIndex];
+      for(var i = 0; i< row.length; i++){
+        if(row[i] === 1 && wasFound === false) {
+          wasFound = true;
+        } else if(row[i] === 1) {
+          result = true;
+        }
+      }
+      return result;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var result = false;
+      var wasFound = false;
+      var chessboard = this.attributes;
+      for(var row in chessboard) {
+        if(this.hasRowConflictAt(row)) {
+          result = true;
+        }
+      }
+      return result;    
     },
 
 
