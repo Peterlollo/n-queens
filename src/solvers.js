@@ -53,108 +53,55 @@ window.countNRooksSolutions = function(n) {
 
 
 window.findNQueensSolution = function(n) {
-   var tempSolution = [];
-  var count = 0;
-  var queens = 0;
-  for(var j = 0; j < n; j++) {
-   var tempArr = [];
-   for(var i = 0; i< n; i++) {
-      tempArr = tempArr.concat(0);
-    }
-    tempSolution.push(tempArr);
+  if(n === 2 || n === 3) {
+    return [];
   }
-
-  var board = new Board(tempSolution);
-
-  var chessboard = board.rows();
-  console.log('CHESSBOARD:', tempSolution);
-  var boardArray = [];
-
-  var recurse = function (boardParam) {
-    console.log('boardParam: ', boardParam);
-    queens = 0;
-    for(var k = 0; k < n; k++) {
-      for(var m = 0; m < n; m++) {
-        if(boardParam[k][m] === 1) {
-          queens++;
+  var board = new Board({n: n});
+  var solution = [];
+  var rowCount = 0;
+  function deepCopy(obj) {
+    if (Object.prototype.toString.call(obj) === '[object Array]') {
+        var out = [], i = 0, len = obj.length;
+        for ( ; i < len; i++ ) {
+          out[i] = arguments.callee(obj[i]);
         }
-      }
-      if(queens === n) {
-      return boardParam;
+      return out;
     }
-      boardArray.push(boardParam.slice());
-      boardArray[boardArray.length - 1][k] = 1;
-      var test = new Board(boardArray[boardArray.length - 1]);
-      if(test.hasAnyQueeConflicts()) {
-        boardArray.splice(boardArray.length-1, 1);
-      }
+    if (typeof obj === 'object') {
+        var out = {}, i;
+        for ( i in obj ) {
+          out[i] = arguments.callee(obj[i]);
+        }
+      return out;
     }
-    for(var l = 0; l<boardArray.length; l++) {
-      recurse(boardArray[l]);
+    return obj;
+}
+
+
+  var recurse = function (row) {
+    if(row === n) {
+      console.log('Single solution for ' + n + ' queens:', JSON.stringify(board.rows()));
+      solution = deepCopy(board.rows());
+      return true;
+    }
+    for(var i = 0; i < n; i++) {
+      board.togglePiece(row, i);
+      if(!(board.hasAnyQueensConflicts()) && recurse(row + 1)) {
+        break;
+      } else {
+        board.togglePiece(row, i);
+      }
     }
   };
 
-  return recurse(chessboard);
+  recurse(rowCount);
+  return solution;
 };
 
 
-  // var solution = []; //fixme
-  // var tempSolution = [];
-  // var count = 0;
-  // var queens = 0;
-  // for(var j = 0; j < n; j++) {
-  //  var tempArr = [];
-  //  for(var i = 0; i< n; i++) {
-  //     tempArr.push(0);
-  //   }
-  //   tempSolution.push(tempArr);
-  // }
-
-  // var board = new Board(tempSolution);
-  // var chessboard = board.rows();
-
-  // var recurse = function (boardParam, counter) {
-   
-  //   if(queens === n) {
-
-  //     console.log('Single solution for ' + n + ' queens:', JSON.stringify(boardParam));
-  //     return boardParam;
-  //   }
-  //   else {
-  //     for(var k = 0; k < n; k++) {
-  //       for(var j = counter; j < n; j++) {
-  //         boardParam[k][j] = 1;
-  //         if(boardParam.hasAnyMajorDiagonalConflicts) {
-  //           boardParam[k][j] = 0;
-  //         }
-  //         else if(boardParam.hasAnyMinorDiagonalConflicts) {
-  //           boardParam[k][j] = 0;
-  //         }
-  //         else if(boardParam.hasAnyRowConflicts) {
-  //           boardParam[k][j] = 0;
-  //         }
-  //         else if(boardParam.hasAnyColConflicts) {
-  //           boardParam[k][j] = 0;
-  //         }
-  //         else {
-  //           queens++;
-  //           recurse(boardParam, counter++);
-  //         }
-  //       }
-  //     }
-  //   }
-
-  // };
-
-
-
-  
-  // return recurse(chessboard, 0);
-// };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
