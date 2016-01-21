@@ -165,26 +165,6 @@
         result = true;
       }  
 
-     //  var recurse = function (theBoard) {
-     //    console.log(result);
-     //  if(theBoard.length < 1) {
-     //    return result;
-     //  }
-     //  var count = 0;
-     //  var startIndex = majorDiagonalColumnIndexAtFirstRow;
-     //  for(var i = 0; i<theBoard.length; i++) {
-     //    var row = theBoard[i];
-     //    if(row[startIndex] === 1){
-     //      count++;
-     //    }
-     //    startIndex++;
-     //  }
-     //  if(count > 1){
-     //    result = true;
-     //  }  
-     //  recurse(theBoard.slice(1));
-     // };
-
       return result;
     },
 
@@ -198,30 +178,6 @@
             result = true;
           }
         }
-
-      // var recurse = function (board) {
-      //   if(board.length < 1 || result === true) {
-      //     return result;
-      //   } 
-      //   else {
-      //     for(var i = 0; i<board[0].length; i++) {
-      //       // var row = board[0];
-      //       result = this.hasMajorDiagonalConflictAt(i);
-      //     }
-      //   }
-      //     //   if(row[startIndex] === 1){
-      //     //     count++;
-      //     //   }
-      //     //   startIndex++;
-      //   // board.shift();
-      //   // if(count > 1){
-      //   //   result = true;
-      //   // }
-      //   //count = 0;
-      //   // startIndex = majorDiagonalColumnIndexAtFirstRow;
-      //   board.shift();
-      //   recurse(board);
-      // };
       return result;
     },
 
@@ -232,16 +188,35 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      var result = false;
+    var result = false;
+      var chessboard = this.rows();
+      var count = 0;
+      var startIndex = minorDiagonalColumnIndexAtFirstRow;
+      for(var i = 0; i<chessboard.length; i++) {
+        var row = chessboard[i];
+        if(row[startIndex] === 1){
+          count++;
+        }
+        startIndex--;
+      }
+      if(count > 1){
+        result = true;
+      }  
 
-      return result; // fixme
+      return result;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      var result = false;
-
-      return result; // fixme
+    var result = false;
+      var chessboard = this.rows();
+      var leng = chessboard.length;
+        for(var i = (leng*2); i>=0; i--) {
+          if(this.hasMinorDiagonalConflictAt(i)) {
+            result = true;
+          }
+        }
+      return result;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
