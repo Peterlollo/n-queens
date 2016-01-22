@@ -80,17 +80,13 @@
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
       var result = false;
-      var wasFound = false;
+      var count = 0;
       var chessboard = this.rows();
       var row = chessboard[rowIndex];
-      for(var i = 0; i< row.length; i++){
-        if(row[i] === 1 && wasFound === false) {
-          wasFound = true;
-        } else if(row[i] === 1) {
-          result = true;
+      for(var i = 0; i < row.length; i++){
+        count += row[i];
         }
-      }
-      return result;
+      return count > 1;
     },
 
     // test if any rows on this board contain conflicts
@@ -102,7 +98,7 @@
           result = true;
         }
       }
-      return result;    
+      return result;
     },
 
 
@@ -113,11 +109,11 @@
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
       var result = false;
-      var wasFound = false;
       var count = 0;
       var chessboard = this.rows();
       for(var i = 0; i<chessboard.length; i++){
-        count += chessboard[i][colIndex];
+        var row = chessboard[i];
+        count += row[colIndex];
       }
       if(count > 1){
         result = true;
@@ -129,14 +125,11 @@
     hasAnyColConflicts: function() {
       var result = false;
       var chessboard = this.rows();
-      var foundIndex;
       for(var i = 0; i<chessboard.length; i++){
         var row = chessboard[i];
         for(var j = 0; j<row.length; j++) {
-          // if(row[j] === 1) {
-            if(this.hasColConflictAt(j)) {
-              result = true;
-            // }
+          if(this.hasColConflictAt(j)) {
+            result = true;
           }
         }
       }
@@ -161,11 +154,7 @@
         }
         startIndex++;
       }
-      if(count > 1){
-        result = true;
-      }  
-
-      return result;
+      return count > 1;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -173,7 +162,7 @@
       var result = false;
       var chessboard = this.rows();
       var leng = chessboard.length;
-        for(var i = (leng/2)*-1; i<leng; i++) {
+        for(var i = Math.floor((leng/2)*-1) - 5; i<leng; i++) {
           if(this.hasMajorDiagonalConflictAt(i)) {
             result = true;
           }
@@ -199,11 +188,7 @@
         }
         startIndex--;
       }
-      if(count > 1){
-        result = true;
-      }  
-
-      return result;
+      return count > 1;
     },
 
     // test if any minor diagonals on this board contain conflicts
@@ -211,7 +196,7 @@
     var result = false;
       var chessboard = this.rows();
       var leng = chessboard.length;
-        for(var i = (leng*2); i>=0; i--) {
+        for(var i = (leng*3); i>0; i--) {
           if(this.hasMinorDiagonalConflictAt(i)) {
             result = true;
           }
